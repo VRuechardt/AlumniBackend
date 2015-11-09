@@ -29,7 +29,14 @@ class HelloWorld(Resource):
 
 
 class Login(Resource):
-    def post(selfself):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('email')
+        parser.add_argument('password')
+        args = parser.parse_args()
+
+        print args
+
         return 201
 
 
@@ -44,7 +51,8 @@ class PutUser(Resource):
         #return 201
 
 api.add_resource(HelloWorld, '/api/')
-api.add_resource(PutUser, '/api/PutUser')
+api.add_resource(PutUser, '/api/putuser')
+api.add_resource(Login, '/api/login')
 
 
 @app.route('/', defaults={'path': 'index.html'})
