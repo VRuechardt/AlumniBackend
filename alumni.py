@@ -9,8 +9,6 @@ app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
-conn =  sqlite3.connect('alumni.db')
-c = conn.cursor()
 
 app.config.update(
     DEBUG=True,
@@ -47,12 +45,16 @@ class Login(Resource):
 
 class PutUser(Resource):
     def post(self):
+        conn =  sqlite3.connect('alumni.db')
+        c = conn.cursor()
         parser = reqparse.RequestParser()
         parser.add_argument('email')
         parser.add_argument('lastname')
         parser.add_argument('firstname')
         parser.add_argument('password')
         args = parser.parse_args()
+        #c.execute("INSERT INTO USERS VALUES (null,%s,%s',%s,%s),",args['email'],args['lastname'],args['firstname'],args['password'])
+        c.execute("INSERT INTO USERS (email, lastname, firstname, password) VALUES (?,?,?,?)",(args['email'], args['lastname'],args['firstname'],args['password']))
         print(args)
         return 201
 
