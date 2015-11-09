@@ -22,7 +22,7 @@ mail.init_app(app)
 
 class HelloWorld(Resource):
     def get(self):
-        util.mail_service.send_registration_confirmation("valentin@ruechardt.de")
+        #util.mail_service.send_registration_confirmation("valentin@ruechardt.de")
         return {'hello': 'world'}
 
 api.add_resource(HelloWorld, '/')
