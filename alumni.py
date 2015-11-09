@@ -24,6 +24,9 @@ class HelloWorld(Resource):
     def get(self):
         #util.mail_service.send_registration_confirmation("valentin@ruechardt.de")
         return {'hello': 'world'}
+    def post(self):
+        return {'hello': 'vau'}
+
 
 api.add_resource(HelloWorld, '/')
 
