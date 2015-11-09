@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_restful import Resource, Api, reqparse
 from flask.ext.cors import CORS
 from util.mail_service import mail
@@ -38,8 +38,16 @@ class PutUser(Resource):
         #print(task)
         #return 201
 
-api.add_resource(HelloWorld, '/')
-api.add_resource(PutUser, '/PutUser')
+api.add_resource(HelloWorld, '/api/')
+api.add_resource(PutUser, '/api/PutUser')
+
+
+@app.route('/', defaults={'path': 'index.html'})
+@app.route('/<path:path>')
+def server_static(path):
+    print '../Alumni/app/', path
+    return send_from_directory('../Alumni/app/', path)
+
 
 print __name__
 
