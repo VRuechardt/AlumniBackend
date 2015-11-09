@@ -28,6 +28,11 @@ class HelloWorld(Resource):
         return {'hello': 'vau'}
 
 
+class Login(Resource):
+    def post(selfself):
+        return 201
+
+
 class PutUser(Resource):
     def post(self):
         return 201
