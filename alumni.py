@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 from flask.ext.cors import CORS
 import util.mail_service
 from util.mail_service import mail
@@ -23,12 +23,24 @@ mail.init_app(app)
 class HelloWorld(Resource):
     def get(self):
         #util.mail_service.send_registration_confirmation("valentin@ruechardt.de")
+
         return {'hello': 'world'}
     def post(self):
         return {'hello': 'vau'}
 
 
+class PutUser(Resource):
+    def post(self):
+        return 201
+        #parser = reqparse.RequestParser()
+        #parser.add_argument('email')
+        #args = parser.parse_args()
+        #task = {'task': args['mail']}
+        #print(task)
+        #return 201
+
 api.add_resource(HelloWorld, '/')
+api.add_resource(PutUser, '/PutUser')
 
 print __name__
 
