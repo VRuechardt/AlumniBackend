@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
 from flask.ext.cors import CORS
-import util.mail_service
 from util.mail_service import mail
 
 app = Flask(__name__)
