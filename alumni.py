@@ -40,9 +40,16 @@ class Login(Resource):
         parser.add_argument('password')
         args = parser.parse_args()
 
-        print args
+        conn =  sqlite3.connect('alumni.db')
+        c = conn.cursor()
 
-        return 201
+        c.execute("SELECT * FROM users WHERE email = ? AND password = ?", (args['email'], args['password']))
+        res = c.fetchall()
+
+        if len(res) > 0:
+            return 201
+
+        return 403
 
 
 class User(Resource):
