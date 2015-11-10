@@ -3,7 +3,9 @@ from flask_restful import Resource, Api, reqparse
 from flask.ext.cors import CORS
 from util.mail_service import mail
 from passlib.hash import sha256_crypt
+import util
 import sqlite3
+import random
 
 app = Flask(__name__)
 CORS(app)
@@ -24,7 +26,7 @@ mail.init_app(app)
 
 class HelloWorld(Resource):
     def get(self):
-        #util.mail_service.send_registration_confirmation("valentin@ruechardt.de")
+
 
         return {'hello': 'world'}
     def post(self):
@@ -43,23 +45,36 @@ class Login(Resource):
         return 201
 
 
-class PutUser(Resource):
+class User(Resource):
+    def put(self):
+        conn =  sqlite3.connect('alumni.db')
+        c = conn.cursor()
+        parser = reqparse.RequestParser()
+        parser.add_argument('lastname')
+        parser.add_argument('firstname')
+        parser.add_argument('password')
+        parser.add_argument('code')
+        args = parser.parse_args()
+        c.execute('UPDATE users SET lastname = ?, firstname = ?, password = ?, authenticated = 1 WHERE authenticationcode = ?', (args['lastname'], args['firstname'], args['password'], str(args['code'])))
+        conn.commit()
+        print(args)
+        return 201
+
     def post(self):
         conn =  sqlite3.connect('alumni.db')
         c = conn.cursor()
         parser = reqparse.RequestParser()
         parser.add_argument('email')
-        parser.add_argument('lastname')
-        parser.add_argument('firstname')
-        parser.add_argument('password')
         args = parser.parse_args()
-        #c.execute("INSERT INTO USERS VALUES (null,%s,%s',%s,%s),",args['email'],args['lastname'],args['firstname'],args['password'])
-        c.execute("INSERT INTO USERS (email, lastname, firstname, password) VALUES (?,?,?,?)",(args['email'], args['lastname'],args['firstname'],args['password']))
+        code=random.randint(0,10000)
+        util.mail_service.send_registration_confirmation(args['email'], code)
+        c.execute("INSERT INTO USERS (email, authenticated, authenticationcode) VALUES (?,?,?)", (args['email'], 0, code))
+        conn.commit()
         print(args)
         return 201
 
 api.add_resource(HelloWorld, '/api/')
-api.add_resource(PutUser, '/api/putuser')
+api.add_resource(User, '/api/user')
 api.add_resource(Login, '/api/login')
 
 
