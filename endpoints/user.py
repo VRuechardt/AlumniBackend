@@ -1,10 +1,14 @@
+from flask import session
 from flask_restful import Resource, Api, reqparse
 import hashlib
 import sqlite3
 import random
 import util
+from decorators.auth import restricted
+
 
 class Login(Resource):
+    @restricted
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('email')
@@ -18,6 +22,7 @@ class Login(Resource):
         res = c.fetchall()
 
         if len(res) > 0:
+            session['email'] = args['email']
             return 201
 
         return 403
