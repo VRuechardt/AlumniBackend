@@ -6,6 +6,10 @@ import random
 import util
 from decorators.auth import restricted
 
+class CheckLogin(Resource):
+    @restricted
+    def get(self):
+        return {"authorized": True}
 
 class Login(Resource):
     def post(self):
@@ -31,7 +35,7 @@ class Logout(Resource):
     @restricted
     def get(self):
         session.pop('email', None)
-        return 200
+        return 201
 
 class User(Resource):
     def put(self):

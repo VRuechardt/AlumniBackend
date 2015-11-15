@@ -25,6 +25,7 @@ mail.init_app(app)
 api.add_resource(user.User, '/api/user')
 api.add_resource(user.Login, '/api/login')
 api.add_resource(user.Logout, '/api/logout')
+api.add_resource(user.CheckLogin, '/api/check_login')
 
 
 @app.route('/', defaults={'path': 'index.html'})
