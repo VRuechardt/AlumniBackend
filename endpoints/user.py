@@ -1,4 +1,4 @@
-from flask import session
+from flask import session, redirect, url_for
 from flask_restful import Resource, Api, reqparse
 import hashlib
 import sqlite3
@@ -8,7 +8,6 @@ from decorators.auth import restricted
 
 
 class Login(Resource):
-    @restricted
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('email')
@@ -18,7 +17,8 @@ class Login(Resource):
         conn = sqlite3.connect('alumni.db')
         c = conn.cursor()
 
-        c.execute("SELECT * FROM users WHERE email = ? AND password = ?", (args['email'], hashlib.sha2556(args['password'])))
+        password = str(hashlib.sha256(args['password']).hexdigest())
+        c.execute("SELECT * FROM users WHERE email = ? AND password = ?", (args['email'], password))
         res = c.fetchall()
 
         if len(res) > 0:
@@ -27,6 +27,11 @@ class Login(Resource):
 
         return 403
 
+class Logout(Resource):
+    @restricted
+    def get(self):
+        session.pop('email', None)
+        return 200
 
 class User(Resource):
     def put(self):
@@ -38,11 +43,11 @@ class User(Resource):
         parser.add_argument('password')
         parser.add_argument('code')
         args = parser.parse_args()
-        c.execute('UPDATE users SET lastname = ?, firstname = ?, password = ?, authenticated = 1 WHERE authenticationcode = ?', (args['lastname'], args['firstname'], hashlib.sha256(args['password']), str(args['code'])))
+        c.execute('UPDATE users SET lastname = ?, firstname = ?, password = ?, authenticated = 1 WHERE authenticationcode = ?', (args['lastname'], args['firstname'], hashlib.sha256(args['password']).hexdigest(), str(args['code'])))
         conn.commit()
-        print(args)
         return 201
 
+    @restricted
     def post(self):
         conn = sqlite3.connect('alumni.db')
         c = conn.cursor()
