@@ -4,6 +4,8 @@ from flask.ext.cors import CORS
 from util.mail_service import mail
 from endpoints import user, event
 
+
+
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
@@ -26,6 +28,9 @@ api.add_resource(user.User, '/api/user')
 api.add_resource(user.Login, '/api/login')
 api.add_resource(user.Logout, '/api/logout')
 api.add_resource(user.CheckLogin, '/api/check_login')
+api.add_resource(user.Users, '/api/users/')
+api.add_resource(user.SingleUsers, '/api/user/<int:user_id>')
+api.add_resource(user.Upload, '/api/upload_profile_picture')
 
 api.add_resource(event.Event, '/api/event/<int:event_id>')
 api.add_resource(event.Events, '/api/events')
