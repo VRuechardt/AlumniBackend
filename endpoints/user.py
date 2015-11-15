@@ -27,7 +27,12 @@ class Login(Resource):
 
         if len(res) > 0:
             session['email'] = args['email']
-            return 201
+            allowedChars = 'abcdefghijklmnopqrstuvxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+            code = ""
+            for i in range(5):
+                code += random.choice(allowedChars)
+            print code
+            return code, 201
 
         return 403
 
