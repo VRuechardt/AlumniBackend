@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS events
 	 (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 		name			      TEXT,
+    description     TEXT,
     startdate       INTEGER(20),
     enddate         INTEGER(20));
 

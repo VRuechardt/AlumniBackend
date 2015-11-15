@@ -39,11 +39,12 @@ class Events(Resource):
         parser.add_argument('name')
         parser.add_argument('startdate')
         parser.add_argument('enddate')
+        parser.add_argument('description')
         args = parser.parse_args()
 
         conn = sqlite3.connect('alumni.db')
         c = conn.cursor()
-        c.execute("INSERT INTO events (name, startdate, enddate) VALUES (?, ?, ?)", (args['name'], args['startdate'], args['enddate']))
+        c.execute("INSERT INTO events (name, description, startdate, enddate) VALUES (?, ?, ?, ?)", (args['name'], args['description'], args['startdate'], args['enddate']))
 
         id = (int(c.lastrowid),)
         c.execute('SELECT * FROM events WHERE id = ?', id)
