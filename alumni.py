@@ -2,7 +2,7 @@ from flask import Flask, send_from_directory, session
 from flask_restful import Resource, Api, reqparse
 from flask.ext.cors import CORS
 from util.mail_service import mail
-from endpoints import user
+from endpoints import user, event
 
 app = Flask(__name__)
 CORS(app)
@@ -26,6 +26,9 @@ api.add_resource(user.User, '/api/user')
 api.add_resource(user.Login, '/api/login')
 api.add_resource(user.Logout, '/api/logout')
 api.add_resource(user.CheckLogin, '/api/check_login')
+
+api.add_resource(event.Event, '/api/event/<int:event_id>')
+api.add_resource(event.Events, '/api/events')
 
 
 @app.route('/', defaults={'path': 'index.html'})

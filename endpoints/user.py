@@ -24,13 +24,17 @@ class Login(Resource):
         password = str(hashlib.sha256(args['password']).hexdigest())
         c.execute("SELECT * FROM users WHERE email = ? AND password = ?", (args['email'], password))
         res = c.fetchall()
-
+        print res
         if len(res) > 0:
             session['email'] = args['email']
             allowedChars = 'abcdefghijklmnopqrstuvxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
             code = ""
             for i in range(5):
                 code += random.choice(allowedChars)
+            conn = sqlite3.connect('alumni.db')
+            c = conn.cursor()
+            c.execute('UPDATE users SET logincode = ? WHERE email = ?', (code, args['email']))
+            conn.commit()
             print code
             return code, 201
 
