@@ -2,7 +2,7 @@ from flask import Flask, send_from_directory, session
 from flask_restful import Resource, Api, reqparse
 from flask.ext.cors import CORS
 from util.mail_service import mail
-from endpoints import user, event
+from endpoints import user, event, conversation
 
 
 
@@ -34,6 +34,8 @@ api.add_resource(user.Upload, '/api/upload_profile_picture')
 
 api.add_resource(event.Event, '/api/event/<int:event_id>')
 api.add_resource(event.Events, '/api/events')
+
+api.add_resource(conversation.conversation, '/api/conversation')
 
 
 @app.route('/', defaults={'path': 'index.html'})
