@@ -4,7 +4,7 @@ import hashlib
 import sqlite3
 import random
 import util
-from util import email_id
+from util import stuff
 import os
 from decorators.auth import restricted, restricted_myself
 from werkzeug import utils
@@ -116,7 +116,7 @@ class SingleUsers(Resource):
         @restricted_myself('users', 'id', user_id)
         def do_put():
 
-            user_id = util.email_id.email_to_user_id(session['email'])
+            user_id = util.stuff.email_to_user_id(session['email'])
 
             conn = sqlite3.connect('alumni.db')
             c = conn.cursor()

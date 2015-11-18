@@ -1,4 +1,5 @@
 import sqlite3
+import cgi
 
 
 def email_to_user_id(email):
@@ -12,3 +13,6 @@ def email_to_user_id(email):
     return user_id
 
 
+def nl2br(string):
+    s = cgi.escape(string)
+    return s.replace('\n', '<br>\n')

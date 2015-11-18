@@ -2,6 +2,7 @@
 from flask_restful import Resource, reqparse
 import sqlite3
 from decorators.auth import restricted
+from util import stuff
 import json
 
 
@@ -44,7 +45,7 @@ class Events(Resource):
 
         conn = sqlite3.connect('alumni.db')
         c = conn.cursor()
-        c.execute("INSERT INTO events (name, description, startdate, enddate) VALUES (?, ?, ?, ?)", (args['name'], args['description'], args['startdate'], args['enddate']))
+        c.execute("INSERT INTO events (name, description, startdate, enddate) VALUES (?, ?, ?, ?)", (args['name'], stuff.nl2br(args['description']), args['startdate'], args['enddate']))
 
         id = (int(c.lastrowid),)
         c.execute('SELECT * FROM events WHERE id = ?', id)
