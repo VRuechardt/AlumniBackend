@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS experience
 CREATE TABLE IF NOT EXISTS events
 	 (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     created         INTEGER(20),
+    userID          INTEGER,
 		name			      TEXT,
     description     TEXT,
     startdate       INTEGER(20),

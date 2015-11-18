@@ -8,7 +8,7 @@ def restricted(func):
     def check_login(*args, **kwargs):
         if 'email' in session:
             return func(*args, **kwargs)
-        return {"unauthorized": True}
+        return {"unauthorized": True}, 401
     return check_login
 
 def restricted_myself(table, columnname, entry):
@@ -33,7 +33,7 @@ def restricted_myself(table, columnname, entry):
                 if res.__len__() == 1:
                     return func(*args, **kwargs)
 
-            return {"unauthorized": True}
+            return {"unauthorized": True}, 401
 
         return check_myself
     return decorator

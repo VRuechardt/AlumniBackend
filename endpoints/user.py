@@ -4,6 +4,7 @@ import hashlib
 import sqlite3
 import random
 import util
+from util import email_id
 import os
 from decorators.auth import restricted, restricted_myself
 from werkzeug import utils
@@ -21,7 +22,13 @@ def get_extension(filename):
 class CheckLogin(Resource):
     @restricted
     def get(self):
-        return {"authorized": True}
+        conn = sqlite3.connect('alumni.db')
+        c = conn.cursor()
+        email = (str(session['email']),)
+        c.execute('SELECT * FROM users WHERE email = ?', email)
+        r = [dict((c.description[i][0], value) for i, value in enumerate(row)) for row in c.fetchall()]
+        c.connection.close()
+        return r[0] if r else None
 
 class Login(Resource):
     def post(self):
@@ -88,6 +95,8 @@ class User(Resource):
 
 
 class SingleUsers(Resource):
+
+    # get some users profile
     @restricted
     def get(self, user_id):
 
@@ -101,10 +110,41 @@ class SingleUsers(Resource):
         c.connection.close()
         return r[0] if r else None
 
+    # update own profile (critical info , requires password)
     @restricted
     def put(self, user_id):
         @restricted_myself('users', 'id', user_id)
-        def do_put(self):
+        def do_put():
+
+            user_id = util.email_id.email_to_user_id(session['email'])
+
+            conn = sqlite3.connect('alumni.db')
+            c = conn.cursor()
+            parser = reqparse.RequestParser()
+            parser.add_argument('firstname', required=True)
+            parser.add_argument('lastname', required=True)
+            # only if user wants to change his password
+            parser.add_argument('password')
+            parser.add_argument('newpassword')
+            args = parser.parse_args()
+
+            if args['password'] and args['newpassword']:
+                password = hashlib.sha256(args['password']).hexdigest()
+                new_password = hashlib.sha256(args['newpassword']).hexdigest()
+
+                test_data = (user_id, password)
+                c.execute('SELECT * FROM users WHERE id = ? AND password = ?', test_data)
+                if c.fetchall().__len__() == 0:
+                    return {}, 401
+
+                data = (args['firstname'], args['lastname'], new_password, int(user_id), password)
+                c.execute('UPDATE users SET firstname = ?, lastname = ?, password = ? WHERE id = ? AND password = ?', data)
+                conn.commit()
+            else:
+                data = (args['firstname'], args['lastname'], int(user_id))
+                print data
+                c.execute('UPDATE users SET firstname = ?, lastname = ? WHERE id = ?', data)
+                conn.commit()
             return {}
 
         return do_put()
