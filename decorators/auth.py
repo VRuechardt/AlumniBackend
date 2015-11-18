@@ -26,15 +26,9 @@ def restricted_myself(table, columnname, entry):
                 c.execute('SELECT id FROM users WHERE email = ?', user_email)
                 user_id = c.fetchone()[0]
 
-                print '-------------------------'
-                print user_id
-
                 ids = (user_id, entry)
-                print ids
                 c.execute('SELECT * FROM ' + table + ' WHERE id = ? AND ' + columnname + ' = ?', ids)
                 res = c.fetchall()
-
-                print res
 
                 if res.__len__() == 1:
                     return func(*args, **kwargs)
