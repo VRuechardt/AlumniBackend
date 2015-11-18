@@ -22,6 +22,17 @@ def get_user(userID):
     c.connection.close()
     return r[0] if r else None
 
+def get_conversation(conversation_id):
+
+    conn = sqlite3.connect('alumni.db')
+    c = conn.cursor()
+    c.execute('SELECT id, topic, adminID FROM conversations WHERE id = ?', (conversation_id,))
+
+    r = [dict((c.description[i][0], value) for i, value in enumerate(row)) for row in c.fetchall()]
+    c.connection.close()
+    return r[0] if r else None
+
+
 def nl2br(string):
     s = cgi.escape(string)
     return s.replace('\n', '<br>\n')

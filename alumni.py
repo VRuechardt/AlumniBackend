@@ -40,6 +40,9 @@ api.add_resource(event.Posts, '/api/event/<int:event_id>/posts')
 api.add_resource(conversation.conversation, '/api/conversation')
 api.add_resource(conversation.AddUser, '/api/conversation/add')
 api.add_resource(conversation.conversationParticipants, '/api/conversation/members/<int:id>')
+api.add_resource(conversation.Message, '/api/conversation/<int:conv_id>/<int:start_id>')
+
+
 @app.route('/', defaults={'path': 'index.html'})
 @app.route('/<path:path>')
 def server_static(path):

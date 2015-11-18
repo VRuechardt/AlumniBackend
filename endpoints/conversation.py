@@ -6,14 +6,21 @@ from decorators.auth import restricted
 
 
 class conversation(Resource):
+    @restricted
     def get(self):
         creatorID = stuff.email_to_user_id(session['email'])
         conn = sqlite3.connect("alumni.db")
         c = conn.cursor()
         c.execute("SELECT conversationID FROM conversationparticipants WHERE userID = ?", (creatorID,))
-        args = c.fetchall()
-        return [v[0] for v in enumerate(args)]
 
+        r = [dict((c.description[i][0], value) for i, value in enumerate(row)) for row in c.fetchall()]
+
+        for i in r:
+            i['conversation'] = stuff.get_conversation(int(i['conversationID']))
+        c.connection.close()
+        return r
+
+    @restricted
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('participants', action='append')
@@ -35,6 +42,7 @@ class conversation(Resource):
         return conversationID
 
 class AddUser(Resource):
+    @restricted
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('user')
@@ -53,6 +61,7 @@ class AddUser(Resource):
         return 200
 
 class conversationParticipants(Resource):
+    @restricted
     def get(self, id):
         conn = sqlite3.connect("alumni.db")
         c = conn.cursor()
@@ -60,6 +69,23 @@ class conversationParticipants(Resource):
         c.execute("SELECT userID FROM conversationparticipants WHERE conversationID = ?", (id,))
         r = c.fetchall()
         if stuff.email_to_user_id(session['email']) in [v[0] for i, v in enumerate(r)]:
-            return [v[0] for i,v in enumerate(r)]
+            return [v[0] for i, v in enumerate(r)]
         else:
             return {"unauthorized": True}, 401
+
+class Message(Resource):
+    @restricted
+    def get(self, conv_id, start_id):
+        conn = sqlite3.connect("alumni.db")
+        c = conn.cursor()
+
+        if start_id == 0:
+            data = (conv_id,)
+            c.execute("SELECT * FROM messages WHERE conversationID = ? ORDER BY id DESC LIMIT 20", data)
+        else:
+            data = (conv_id, start_id)
+            c.execute("SELECT * FROM messages WHERE conversationID = ? AND id < ? ORDER BY id DESC LIMIT 20", data)
+
+        r = [dict((c.description[i][0], value) for i, value in enumerate(row)) for row in c.fetchall()]
+        c.connection.close()
+        return r
