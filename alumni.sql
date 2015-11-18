@@ -1,14 +1,14 @@
 
-DROP TABLE users;
-DROP TABLE events;
-DROP TABLE attendees;
-DROP TABLE announcements;
-DROP TABLE comments;
-DROP TABLE messages;
-DROP TABLE conversations;
-DROP TABLE conversationparticipants;
-DROP TABLE offers;
-DROP TABLE requests;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS events;
+DROP TABLE IF EXISTS attendees;
+DROP TABLE IF EXISTS announcements;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS messages;
+DROP TABLE IF EXISTS conversations;
+DROP TABLE IF EXISTS conversationparticipants;
+DROP TABLE IF EXISTS offers;
+DROP TABLE IF EXISTS requests;
 
 CREATE TABLE IF NOT EXISTS users
    (id INTEGER PRIMARY KEY AUTOINCREMENT     NOT NULL,
