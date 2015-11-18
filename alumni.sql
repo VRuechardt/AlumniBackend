@@ -1,5 +1,7 @@
 
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS education;
+DROP TABLE IF EXISTS experience;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS attendees;
 DROP TABLE IF EXISTS announcements;
@@ -18,7 +20,31 @@ CREATE TABLE IF NOT EXISTS users
     password        TEXT,
     authenticated   INTEGER,
     logincode		    TEXT,
+    street          TEXT,
+    streetnumber    TEXT,
+    zipcode         TEXT,
+    city            TEXT,
+    country         TEXT,
+    officestreet          TEXT,
+    officestreetnumber    TEXT,
+    officezipcode         TEXT,
+    officecity            TEXT,
+    officecountry         TEXT,
     authenticationcode TEXT);
+
+CREATE TABLE IF NOT EXISTS education
+   (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    fromdate        INTEGER(20),
+    todate          INTEGER(20),
+    title           TEXT,
+    userID          INTEGER(20));
+
+CREATE TABLE IF NOT EXISTS experience
+   (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    fromdate        INTEGER(20),
+    todate          INTEGER(20),
+    title           TEXT,
+    userID          INTEGER(20));
 
 CREATE TABLE IF NOT EXISTS events
 	 (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -30,6 +56,8 @@ CREATE TABLE IF NOT EXISTS events
     street          TEXT,
     streetnumber    TEXT,
     zipcode         TEXT,
+    city            TEXT,
+    country         TEXT,
     institution     TEXT);
 
 CREATE TABLE IF NOT EXISTS attendees

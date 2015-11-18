@@ -5,7 +5,7 @@ import sqlite3
 import random
 import util
 import os
-from decorators.auth import restricted
+from decorators.auth import restricted, restricted_myself
 from werkzeug import utils
 from PIL import Image
 
@@ -90,6 +90,7 @@ class User(Resource):
 class SingleUsers(Resource):
     @restricted
     def get(self, user_id):
+
         conn = sqlite3.connect('alumni.db')
         c = conn.cursor()
 
@@ -99,6 +100,16 @@ class SingleUsers(Resource):
         r = [dict((c.description[i][0], value) for i, value in enumerate(row)) for row in c.fetchall()]
         c.connection.close()
         return r[0] if r else None
+
+    @restricted
+    def put(self, user_id):
+        @restricted_myself('users', 'id', user_id)
+        def do_put(self):
+            return {}
+
+        return do_put()
+
+
 
 
 class Users(Resource):
