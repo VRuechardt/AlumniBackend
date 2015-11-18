@@ -1,5 +1,7 @@
 
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS education;
+DROP TABLE IF EXISTS experience;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS attendees;
 DROP TABLE IF EXISTS announcements;
@@ -18,11 +20,36 @@ CREATE TABLE IF NOT EXISTS users
     password        TEXT,
     authenticated   INTEGER,
     logincode		    TEXT,
+    street          TEXT,
+    streetnumber    TEXT,
+    zipcode         TEXT,
+    city            TEXT,
+    country         TEXT,
+    officestreet          TEXT,
+    officestreetnumber    TEXT,
+    officezipcode         TEXT,
+    officecity            TEXT,
+    officecountry         TEXT,
     authenticationcode TEXT);
+
+CREATE TABLE IF NOT EXISTS education
+   (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    fromdate        INTEGER(20),
+    todate          INTEGER(20),
+    title           TEXT,
+    userID          INTEGER(20));
+
+CREATE TABLE IF NOT EXISTS experience
+   (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    fromdate        INTEGER(20),
+    todate          INTEGER(20),
+    title           TEXT,
+    userID          INTEGER(20));
 
 CREATE TABLE IF NOT EXISTS events
 	 (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     created         INTEGER(20),
+    userID          INTEGER,
 		name			      TEXT,
     description     TEXT,
     startdate       INTEGER(20),
@@ -30,6 +57,8 @@ CREATE TABLE IF NOT EXISTS events
     street          TEXT,
     streetnumber    TEXT,
     zipcode         TEXT,
+    city            TEXT,
+    country         TEXT,
     institution     TEXT);
 
 CREATE TABLE IF NOT EXISTS attendees
@@ -83,3 +112,4 @@ CREATE TABLE IF NOT EXISTS requests
 -- adding some dummy data
 INSERT INTO users (email, lastname, firstname, password) VALUES ('valentin@ruechardt.de', 'Ruechardt', 'Valentin', '0932f91eafea248b0ce8e0140c85322eee6abac2a04acd97d4c48254c0d72123');
 INSERT INTO users (email, lastname, firstname, password) VALUES ('christian.brachert@web.de', 'Brachert', 'Christian', '0932f91eafea248b0ce8e0140c85322eee6abac2a04acd97d4c48254c0d72123');
+INSERT INTO users (email, lastname, firstname, password) VALUES ('bloody.mary@drogen.de', 'Bloody', 'Mary', '0932f91eafea248b0ce8e0140c85322eee6abac2a04acd97d4c48254c0d72123');
