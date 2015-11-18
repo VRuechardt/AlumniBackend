@@ -65,14 +65,14 @@ CREATE TABLE IF NOT EXISTS attendees
    (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     userID          INTEGER,
     eventID         INTEGER,
-    state           INTEGER); -- the state indicates whether an attendee RSVPd, set a 'maybe', declined or is just invited.
+    state           TEXT); -- the state indicates whether an attendee RSVPd, set a 'maybe', declined or is just invited.
 
 CREATE TABLE IF NOT EXISTS announcements -- this might be rationalized away with the comment table
    (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     eventID         INTEGER,
     userID          INTEGER,
     comment         TEXT,
-    posted          INTEGER(20));
+    posted          INTEGER(20)); -- this is a timestamp
 
 CREATE TABLE IF NOT EXISTS comments
    (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

@@ -34,6 +34,8 @@ api.add_resource(user.Upload, '/api/upload_profile_picture')
 
 api.add_resource(event.Event, '/api/event/<int:event_id>')
 api.add_resource(event.Events, '/api/events')
+api.add_resource(event.Attend, '/api/event/<int:event_id>/attend')
+api.add_resource(event.Posts, '/api/event/<int:event_id>/posts')
 
 api.add_resource(conversation.conversation, '/api/conversation')
 api.add_resource(conversation.AddUser, '/api/conversation/add')
