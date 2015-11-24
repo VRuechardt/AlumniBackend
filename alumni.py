@@ -12,7 +12,6 @@ api = Api(app)
 
 
 app.config.update(
-    DEBUG=True,
     MAIL_SERVER='smtp.gmail.com',
     MAIL_PORT=587,
     MAIL_USE_TLS=True,
@@ -55,4 +54,4 @@ app.secret_key = '7p3xX9!4-o'
 print __name__
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
